@@ -12,24 +12,23 @@ import (
 )
 
 type Event struct {
-	TimeStamp time.Time
-	Address []byte
-	Boundry []byte
-	Dispatch []byte
-	Incidentno	[]byte
-	station	[]byte
-	Desc	string
-	Lat	string
-	Lng	string
-	NeLat	string
-	NeLng	string
-	Neighborhood	string
-	Postal	string
-	Station	string
-	SwLat	string
-	SwLng	string
-	Title	string
-
+	TimeStamp    time.Time
+	Address      []byte
+	Boundry      []byte
+	Dispatch     []byte
+	Incidentno   []byte
+	station      []byte
+	Desc         string
+	Lat          string
+	Lng          string
+	NeLat        string
+	NeLng        string
+	Neighborhood string
+	Postal       string
+	Station      string
+	SwLat        string
+	SwLng        string
+	Title        string
 }
 
 func GetEvents(kind string, count int) {
@@ -39,7 +38,6 @@ func GetEvents(kind string, count int) {
 		fmt.Println(err)
 	}
 
-
 	f, err := os.Create("events.csv")
 	if err != nil {
 		return
@@ -47,7 +45,6 @@ func GetEvents(kind string, count int) {
 	defer f.Close()
 
 	w := bufio.NewWriter(f)
-
 
 	query := datastore.NewQuery(kind)
 	mcount := 0
@@ -59,7 +56,6 @@ func GetEvents(kind string, count int) {
 			break
 		}
 
-
 		var task Event
 		_, err := it.Next(&task)
 		if err == iterator.Done {
@@ -68,9 +64,8 @@ func GetEvents(kind string, count int) {
 		if err != nil {
 			log.Fatalf("Error fetching next task: %v", err)
 		}
-		fmt.Printf("%s, %s, %s, %s\n", task.TimeStamp,task.Lat,task.Lng,task.Title)
-		fmt.Fprintf(w,"%s, %s, %s, %s\n", task.TimeStamp,task.Lat,task.Lng,task.Title)
+		fmt.Printf("%s, %s, %s, %s\n", task.TimeStamp, task.Lat, task.Lng, task.Title)
+		fmt.Fprintf(w, "%s, %s, %s, %s\n", task.TimeStamp, task.Lat, task.Lng, task.Title)
 	}
-
 
 }
