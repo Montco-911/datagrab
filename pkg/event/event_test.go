@@ -1,11 +1,15 @@
 package event
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestGetEvents(t *testing.T) {
 	GetEvents("Event", 30)
 }
 
 func TestGetLiveXML(t *testing.T) {
-	GetLiveXML("LiveXml",3)
+	r := GetLiveXML("LiveXml",3)
+	fmt.Println(r)
 }

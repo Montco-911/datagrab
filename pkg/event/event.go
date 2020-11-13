@@ -5,6 +5,7 @@ import (
 	"cloud.google.com/go/datastore"
 	"context"
 	"fmt"
+	"github.com/mchirico/go-get911/pkg/event/xmlparse"
 	"google.golang.org/api/iterator"
 	"log"
 	"os"
@@ -36,8 +37,16 @@ type LiveXML struct {
 	Raw string
 }
 
+type Raw struct {
+	TimeStamp time.Time
+	ActiveAlerts xmlparse.ActiveAlerts
+}
+
 
 func GetEvents(kind string, count int) {
+
+
+
 	ctx := context.Background()
 	client, err := datastore.NewClient(ctx, "mchirico")
 	if err != nil {
@@ -71,26 +80,22 @@ func GetEvents(kind string, count int) {
 			log.Fatalf("Error fetching next task: %v", err)
 		}
 
+
 		fmt.Printf("%s, %s,%s, %s, %s\n", task.TimeStamp,string(task.Incidentno), task.Lat, task.Lng, task.Title)
 		fmt.Fprintf(w, "%s, %s,%s, %s, %s\n", task.TimeStamp,string(task.Incidentno), task.Lat, task.Lng, task.Title)
 	}
 
 }
 
-func GetLiveXML(kind string, count int) {
+func GetLiveXML(kind string, count int) []Raw {
+
+	records := []Raw{}
+
 	ctx := context.Background()
 	client, err := datastore.NewClient(ctx, "mchirico")
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	f, err := os.Create("livexml.csv")
-	if err != nil {
-		return
-	}
-	defer f.Close()
-
-	w := bufio.NewWriter(f)
 
 	query := datastore.NewQuery(kind)
 	mcount := 0
@@ -111,8 +116,12 @@ func GetLiveXML(kind string, count int) {
 			log.Fatalf("Error fetching next task: %v", err)
 		}
 
-		fmt.Printf("%s, %s\n", task.TimeStamp,task.Raw)
-		fmt.Fprintf(w, "%s, %s\n", task.TimeStamp,task.Raw)
+		raw := Raw{}
+		raw.TimeStamp = task.TimeStamp
+		raw.ActiveAlerts = xmlparse.Decode([]byte(task.Raw))
+		records = append(records,raw)
+
 	}
 
+  return records
 }
