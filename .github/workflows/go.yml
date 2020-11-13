@@ -20,6 +20,8 @@ jobs:
 
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
+      with:
+        GOOGLE_APPLICATION_CREDENTIALS:  ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
     - name: Get dependencies
       run: |
@@ -34,8 +36,7 @@ jobs:
 
     - name: Test
       run: go test -race -v -coverprofile=coverage.txt ./...
-      with:
-        GOOGLE_APPLICATION_CREDENTIALS:  ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      
 
     - name: Make
       run: make
