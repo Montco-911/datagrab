@@ -156,9 +156,6 @@ func MockData() string {
 
 }
 
-
-
-
 func TestDecode(t *testing.T) {
 	data := []byte(MockData())
 	a := Decode(data)
@@ -167,8 +164,7 @@ func TestDecode(t *testing.T) {
 	}
 	expected := "EMS: GENERAL WEAKNESS"
 	if a.Events[3].Title != expected {
-		t.Fatalf("Expected: %s, got %s\n",expected,a.Events[3].Title)
+		t.Fatalf("Expected: %s, got %s\n", expected, a.Events[3].Title)
 	}
-
 
 }

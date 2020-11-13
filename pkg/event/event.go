@@ -34,18 +34,15 @@ type Event struct {
 
 type LiveXML struct {
 	TimeStamp time.Time
-	Raw string
+	Raw       string
 }
 
 type Raw struct {
-	TimeStamp time.Time
+	TimeStamp    time.Time
 	ActiveAlerts xmlparse.ActiveAlerts
 }
 
-
 func GetEvents(kind string, count int) {
-
-
 
 	ctx := context.Background()
 	client, err := datastore.NewClient(ctx, "mchirico")
@@ -80,9 +77,8 @@ func GetEvents(kind string, count int) {
 			log.Fatalf("Error fetching next task: %v", err)
 		}
 
-
-		fmt.Printf("%s, %s,%s, %s, %s\n", task.TimeStamp,string(task.Incidentno), task.Lat, task.Lng, task.Title)
-		fmt.Fprintf(w, "%s, %s,%s, %s, %s\n", task.TimeStamp,string(task.Incidentno), task.Lat, task.Lng, task.Title)
+		fmt.Printf("%s, %s,%s, %s, %s\n", task.TimeStamp, string(task.Incidentno), task.Lat, task.Lng, task.Title)
+		fmt.Fprintf(w, "%s, %s,%s, %s, %s\n", task.TimeStamp, string(task.Incidentno), task.Lat, task.Lng, task.Title)
 	}
 
 }
@@ -119,9 +115,9 @@ func GetLiveXML(kind string, count int) []Raw {
 		raw := Raw{}
 		raw.TimeStamp = task.TimeStamp
 		raw.ActiveAlerts = xmlparse.Decode([]byte(task.Raw))
-		records = append(records,raw)
+		records = append(records, raw)
 
 	}
 
-  return records
+	return records
 }

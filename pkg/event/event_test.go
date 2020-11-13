@@ -10,6 +10,6 @@ func TestGetEvents(t *testing.T) {
 }
 
 func TestGetLiveXML(t *testing.T) {
-	r := GetLiveXML("LiveXml",3)
+	r := GetLiveXML("LiveXml", 3)
 	fmt.Println(r)
 }
