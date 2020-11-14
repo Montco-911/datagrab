@@ -110,14 +110,14 @@ func WriteFile(file string, r []Raw) {
 }
 
 type DS struct {
-	File string
-	re  *regexp.Regexp
-	Create func(string)(*os.File,*bufio.Writer, error )
+	File    string
+	re      *regexp.Regexp
+	Create  func(string) (*os.File, *bufio.Writer, error)
 	Heading func(*bufio.Writer) error
-	Write func(w *bufio.Writer, re *regexp.Regexp,r Raw)
+	Write   func(w *bufio.Writer, re *regexp.Regexp, r Raw)
 }
 
-func Write(w *bufio.Writer, re *regexp.Regexp,r Raw) {
+func Write(w *bufio.Writer, re *regexp.Regexp, r Raw) {
 	for _, v := range r.ActiveAlerts.Events {
 
 		t := re.FindAllString(v.Desc, -1)
@@ -128,33 +128,28 @@ func Write(w *bufio.Writer, re *regexp.Regexp,r Raw) {
 	}
 }
 
-
-func Create(file string) (*os.File,*bufio.Writer, error ) {
+func Create(file string) (*os.File, *bufio.Writer, error) {
 	f, err := os.Create(file)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	w := bufio.NewWriter(f)
-	return f,w,err
+	return f, w, err
 }
 
-func Heading(w *bufio.Writer)  error{
-	_,err:=fmt.Fprintf(w, "TimeStamp,Title,Desc,Lng,Lag,Postal,Station,AlertTimeStamp\n")
+func Heading(w *bufio.Writer) error {
+	_, err := fmt.Fprintf(w, "TimeStamp,Title,Desc,Lng,Lag,Postal,Station,AlertTimeStamp\n")
 	return err
 }
 
-
 func NewDS(file string) DS {
 	re := regexp.MustCompile(`[0-9]{4}-[0-9]{2}-[0-9]{2} @ [0-9]{2}:[0-9]{2}:[0-9]{2}`)
-	ds := DS{file,re,Create, Heading,Write}
+	ds := DS{file, re, Create, Heading, Write}
 	return ds
 }
 
-
-func (ds DS)GetLiveXML(kind string, count int)  {
-
-
+func (ds DS) GetLiveXML(kind string, count int) {
 
 	ctx := context.Background()
 	client, err := datastore.NewClient(ctx, "mchirico")
@@ -166,7 +161,7 @@ func (ds DS)GetLiveXML(kind string, count int)  {
 
 	mcount := 0
 
-	f,w,err := ds.Create(ds.File)
+	f, w, err := ds.Create(ds.File)
 	defer f.Close()
 	ds.Heading(w)
 
@@ -177,8 +172,8 @@ func (ds DS)GetLiveXML(kind string, count int)  {
 			break
 		}
 
-		if mcount % 1000 == 0 {
-			fmt.Printf("count: %v\n",mcount)
+		if mcount%1000 == 0 {
+			fmt.Printf("count: %v\n", mcount)
 			f.Sync()
 		}
 
@@ -194,10 +189,8 @@ func (ds DS)GetLiveXML(kind string, count int)  {
 		raw := Raw{}
 		raw.TimeStamp = task.TimeStamp
 		raw.ActiveAlerts = xmlparse.Decode([]byte(task.Raw))
-		ds.Write(w,ds.re, raw)
-
+		ds.Write(w, ds.re, raw)
 
 	}
-
 
 }

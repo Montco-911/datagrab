@@ -18,5 +18,5 @@ package main
 import "github.com/Montco-911/datagrab/cmd"
 
 func main() {
-  cmd.Execute()
+	cmd.Execute()
 }
