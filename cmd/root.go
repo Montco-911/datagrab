@@ -44,7 +44,7 @@ to quickly create a Cobra application.`,
   // has an action associated with it:
   	Run: func(cmd *cobra.Command, args []string) {
       ds := event.NewDS("livexml.csv")
-      ds.GetLiveXML("LiveXml", 900000)
+      ds.GetLiveXML("LiveXml", 90000000)
     },
 }
 
