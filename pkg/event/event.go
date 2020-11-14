@@ -195,6 +195,21 @@ func (ds DS) GetLiveXML(kind string, count int) {
 
 }
 
+func RR(f *os.File,b []byte) (int64,int, error) {
+	n,err := f.Read(b)
+	idx := 0
+	for i:= n-1; i > 0; i-- {
+		if b[i] == 10 {
+			idx = i
+			break
+		}
+	}
+	if idx >= n {
+		return 0,0, fmt.Errorf("idx bad")
+	}
+	return int64(idx-n),idx, err
+}
+
 
 func Squish(file string) {
 	f, err := os.Create("out.csv")
@@ -205,20 +220,16 @@ func Squish(file string) {
 
 	f2, err := os.Open(file)
 	defer f2.Close()
-	b := make([]byte, 900)
-	n,err := f2.Read(b)
 
-	idx := 0
-	for i:= n-1; i > 0; i-- {
-		if b[i] == 10 {
-			idx = i
-			break
-		}
-	}
-	fmt.Printf("%v: %v\n",n,string(b[0:idx]))
-    f2.Seek(int64(idx-n),1)
-	n,err = f2.Read(b)
-	fmt.Printf("\n\n%v: %v\n",n,string(b[0:idx]))
+
+
+	b := make([]byte, 900)
+	pt,idx, err := RR(f2,b)
+	fmt.Printf("\n\n%v: %v\n",idx,string(b[0:idx]))
+    f2.Seek(pt,1)
+	pt,idx, err = RR(f2,b)
+
+	fmt.Printf("\n\n%v: %v\n",idx,string(b[0:idx]))
 
 
 
