@@ -179,6 +179,7 @@ func (ds DS)GetLiveXML(kind string, count int)  {
 
 		if mcount % 1000 == 0 {
 			fmt.Printf("count: %v\n",mcount)
+			f.Sync()
 		}
 
 		var task LiveXML
