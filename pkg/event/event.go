@@ -194,3 +194,34 @@ func (ds DS) GetLiveXML(kind string, count int) {
 	}
 
 }
+
+
+func Squish(file string) {
+	f, err := os.Create("out.csv")
+	if err != nil {
+		return
+	}
+	defer f.Close()
+
+	f2, err := os.Open(file)
+	defer f2.Close()
+	b := make([]byte, 900)
+	n,err := f2.Read(b)
+
+	idx := 0
+	for i:= n-1; i > 0; i-- {
+		if b[i] == 10 {
+			idx = i
+			break
+		}
+	}
+	fmt.Printf("%v: %v\n",n,string(b[0:idx]))
+    f2.Seek(int64(idx-n),1)
+	n,err = f2.Read(b)
+	fmt.Printf("\n\n%v: %v\n",n,string(b[0:idx]))
+
+
+
+
+
+}

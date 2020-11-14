@@ -13,3 +13,7 @@ func TestGetLiveXML(t *testing.T) {
 	ds.GetLiveXML("LiveXml", 900)
 
 }
+
+func TestSquish(t *testing.T) {
+	Squish("livexml.csv")
+}
