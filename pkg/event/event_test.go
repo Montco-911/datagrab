@@ -11,7 +11,8 @@ func TestGetEvents(t *testing.T) {
 
 
 func TestGetLiveXML(t *testing.T) {
-	r := GetLiveXML("LiveXml", 900)
-	WriteFile("livexml.csv", r)
+	ds := NewDS("livexml.csv")
+	ds.GetLiveXML("LiveXml", 900)
+
 
 }

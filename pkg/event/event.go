@@ -109,10 +109,52 @@ func WriteFile(file string, r []Raw) {
 
 }
 
+type DS struct {
+	File string
+	re  *regexp.Regexp
+	Create func(string)(*os.File,*bufio.Writer, error )
+	Heading func(*bufio.Writer) error
+	Write func(w *bufio.Writer, re *regexp.Regexp,r Raw)
+}
 
-func GetLiveXML(kind string, count int) []Raw {
+func Write(w *bufio.Writer, re *regexp.Regexp,r Raw) {
+	for _, v := range r.ActiveAlerts.Events {
 
-	records := []Raw{}
+		t := re.FindAllString(v.Desc, -1)
+		if len(t) != 0 {
+			timeStamp := strings.Replace(t[0], " @ ", " ", -1)
+			fmt.Fprintf(w, "%s,%s,%q,%s,%s,%s,%s,%s\n", timeStamp, v.Title, v.Desc, v.Lng, v.Lat, v.Postal, v.Station, r.TimeStamp)
+		}
+	}
+}
+
+
+func Create(file string) (*os.File,*bufio.Writer, error ) {
+	f, err := os.Create(file)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	w := bufio.NewWriter(f)
+	return f,w,err
+}
+
+func Heading(w *bufio.Writer)  error{
+	_,err:=fmt.Fprintf(w, "TimeStamp,Title,Desc,Lng,Lag,Postal,Station,AlertTimeStamp\n")
+	return err
+}
+
+
+func NewDS(file string) DS {
+	re := regexp.MustCompile(`[0-9]{4}-[0-9]{2}-[0-9]{2} @ [0-9]{2}:[0-9]{2}:[0-9]{2}`)
+	ds := DS{file,re,Create, Heading,Write}
+	return ds
+}
+
+
+func (ds DS)GetLiveXML(kind string, count int)  {
+
+
 
 	ctx := context.Background()
 	client, err := datastore.NewClient(ctx, "mchirico")
@@ -123,6 +165,10 @@ func GetLiveXML(kind string, count int) []Raw {
 	query := datastore.NewQuery(kind).Order("-timeStamp")
 
 	mcount := 0
+
+	f,w,err := ds.Create(ds.File)
+	defer f.Close()
+	ds.Heading(w)
 
 	it := client.Run(ctx, query)
 	for {
@@ -147,9 +193,10 @@ func GetLiveXML(kind string, count int) []Raw {
 		raw := Raw{}
 		raw.TimeStamp = task.TimeStamp
 		raw.ActiveAlerts = xmlparse.Decode([]byte(task.Raw))
-		records = append(records, raw)
+		ds.Write(w,ds.re, raw)
+
 
 	}
 
-	return records
+
 }
