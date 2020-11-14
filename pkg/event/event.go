@@ -221,15 +221,26 @@ func Squish(file string) {
 	f2, err := os.Open(file)
 	defer f2.Close()
 
-
+    var offset,old int64
 
 	b := make([]byte, 900)
 	pt,idx, err := RR(f2,b)
 	fmt.Printf("\n\n%v: %v\n",idx,string(b[0:idx]))
-    f2.Seek(pt,1)
-	pt,idx, err = RR(f2,b)
 
-	fmt.Printf("\n\n%v: %v\n",idx,string(b[0:idx]))
+	for {
+		offset,err = f2.Seek(pt,1)
+		pt,idx, err = RR(f2,b)
+		if err != nil {
+			break
+		}
+		fmt.Printf("\n\n%v: %v\n",idx,string(b[0:idx]))
+
+		if offset == old {
+			break
+		}
+		old = offset
+	}
+
 
 
 
