@@ -104,6 +104,10 @@ func GetLiveXML(kind string, count int) []Raw {
 			break
 		}
 
+		if mcount % 1000 == 0 {
+			fmt.Printf("count: %v\n",mcount)
+		}
+
 		var task LiveXML
 		_, err := it.Next(&task)
 		if err == iterator.Done {

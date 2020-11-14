@@ -28,16 +28,17 @@ func WriteFile(file string, r []Raw) {
 		for _, v := range iv.ActiveAlerts.Events {
 
 			t := re.FindAllString(v.Desc, -1)[0]
-			timeStamp := strings.Replace(t, " @ ", " ", -1)
-			fmt.Fprintf(w, "%s,%s,%q,%s,%s,%s,%s,%s\n", timeStamp, v.Title, v.Desc, v.Lng, v.Lat, v.Postal, v.Station, iv.TimeStamp)
-
+			if len(t) != 0 {
+				timeStamp := strings.Replace(t, " @ ", " ", -1)
+				fmt.Fprintf(w, "%s,%s,%q,%s,%s,%s,%s,%s\n", timeStamp, v.Title, v.Desc, v.Lng, v.Lat, v.Postal, v.Station, iv.TimeStamp)
+			}
 		}
 	}
 
 }
 
 func TestGetLiveXML(t *testing.T) {
-	r := GetLiveXML("LiveXml", 300)
+	r := GetLiveXML("LiveXml", 300000)
 	WriteFile("livexml.csv", r)
 
 }
