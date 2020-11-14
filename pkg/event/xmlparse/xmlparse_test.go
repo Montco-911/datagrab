@@ -7,7 +7,6 @@ import (
 
 func TestDecodeXML(t *testing.T) {
 
-
 	d := []byte(mock.MockActiveAlerts())
 	a := Decode(d)
 	if len(a.Events) != 13 {

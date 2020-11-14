@@ -93,7 +93,8 @@ func GetLiveXML(kind string, count int) []Raw {
 		fmt.Println(err)
 	}
 
-	query := datastore.NewQuery(kind)
+	query := datastore.NewQuery(kind).Order("-timeStamp")
+
 	mcount := 0
 
 	it := client.Run(ctx, query)
