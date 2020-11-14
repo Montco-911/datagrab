@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func CreateMock() {
+func CreateMock(file string) {
 	f, _ := os.Create("mockfile.txt")
 	for i := 0; i < 1000; i++ {
 		result := fmt.Sprintf("......(%d)\n", i)
@@ -17,7 +17,8 @@ func CreateMock() {
 }
 
 func TestUT_Squish(t *testing.T) {
-	CreateMock()
+	file := "mockfile.txt"
+	CreateMock(file)
 	ut := NewUT("junk.txt", 50)
-	ut.Squish("mockfile.txt")
+	ut.Squish(file)
 }
