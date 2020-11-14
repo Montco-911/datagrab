@@ -99,9 +99,9 @@ func WriteFile(file string, r []Raw) {
 	for _, iv := range r {
 		for _, v := range iv.ActiveAlerts.Events {
 
-			t := re.FindAllString(v.Desc, -1)[0]
+			t := re.FindAllString(v.Desc, -1)
 			if len(t) != 0 {
-				timeStamp := strings.Replace(t, " @ ", " ", -1)
+				timeStamp := strings.Replace(t[0], " @ ", " ", -1)
 				fmt.Fprintf(w, "%s,%s,%q,%s,%s,%s,%s,%s\n", timeStamp, v.Title, v.Desc, v.Lng, v.Lat, v.Postal, v.Station, iv.TimeStamp)
 			}
 		}
