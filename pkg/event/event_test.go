@@ -37,7 +37,7 @@ func WriteFile(file string, r []Raw) {
 }
 
 func TestGetLiveXML(t *testing.T) {
-	r := GetLiveXML("LiveXml", 300)
+	r := GetLiveXML("LiveXml", 3000)
 	WriteFile("livexml.csv", r)
 
 }

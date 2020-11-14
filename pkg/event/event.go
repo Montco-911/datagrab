@@ -100,8 +100,8 @@ func GetLiveXML(kind string, count int) []Raw {
 	it := client.Run(ctx, query)
 	for {
 		mcount += 1
-		if mcount >= count {
-			break
+		if mcount % 200 == 5 {
+			fmt.Printf("%d\n",mcount)
 		}
 
 		var task LiveXML
