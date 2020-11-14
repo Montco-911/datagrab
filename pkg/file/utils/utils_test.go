@@ -16,9 +16,13 @@ func CreateMock(file string) {
 	defer f.Close()
 }
 
+func Process(b []byte) {
+	fmt.Printf("%s\n", b)
+}
+
 func TestUT_Squish(t *testing.T) {
 	file := "mockfile.txt"
 	CreateMock(file)
-	ut := NewUT("junk.txt", 50)
+	ut := NewUT("junk.txt", 50, Process)
 	ut.Squish(file)
 }

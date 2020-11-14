@@ -9,11 +9,13 @@ import (
 type UT struct {
 	Outfile      string
 	ReadDistance int
+	Process      func([]byte)
 	sync.Mutex
 }
 
-func NewUT(file string, readDistance int) *UT {
-	ut := &UT{file, readDistance, sync.Mutex{}}
+func NewUT(file string, readDistance int, p func([]byte)) *UT {
+	ut := &UT{file, readDistance,
+		p, sync.Mutex{}}
 	return ut
 }
 
@@ -48,7 +50,7 @@ func (ut *UT) Squish(file string) {
 
 	b := make([]byte, ut.ReadDistance)
 	pt, idx, err := RR(f2, b)
-	fmt.Printf("\n\n%v: %v\n", idx, string(b[0:idx]))
+	ut.Process(b[0:idx])
 
 	for {
 		offset, err = f2.Seek(pt, 1)
@@ -56,6 +58,7 @@ func (ut *UT) Squish(file string) {
 		if err != nil {
 			break
 		}
+		ut.Process(b[0:idx])
 		fmt.Printf("\n\n%v: %v\n", idx, string(b[0:idx]))
 
 		if offset == old {
