@@ -59,7 +59,6 @@ func (ut *UT) Squish(file string) {
 			break
 		}
 		ut.Process(b[0:idx])
-		fmt.Printf("\n\n%v: %v\n", idx, string(b[0:idx]))
 
 		if offset == old {
 			break

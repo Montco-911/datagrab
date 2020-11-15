@@ -16,13 +16,24 @@ func CreateMock(file string) {
 	defer f.Close()
 }
 
-func Process(b []byte) {
-	fmt.Printf("%s\n", b)
+type P struct {
+	count int
+}
+
+func (p *P) Process(b []byte) {
+	p.count += 1
+	if p.count < 4 {
+		fmt.Printf("%s\n", b)
+	}
 }
 
 func TestUT_Squish(t *testing.T) {
+	p := &P{}
+
 	file := "mockfile.txt"
 	CreateMock(file)
-	ut := NewUT("junk.txt", 50, Process)
+	ut := NewUT("junk.txt", 50, p.Process)
 	ut.Squish(file)
+
+	fmt.Printf("a= %v\n", p.count)
 }
