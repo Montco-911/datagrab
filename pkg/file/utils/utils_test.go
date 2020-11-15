@@ -36,11 +36,10 @@ func TestUT_LineGulp(t *testing.T) {
 	ut.LineGulp(file)
 
 	if p.count != 252 {
-		t.Fatalf("Expected 252, got: %d\n",p.count)
+		t.Fatalf("Expected 252, got: %d\n", p.count)
 	}
 
 }
-
 
 func TestUT_SetStop(t *testing.T) {
 	p := &P{}

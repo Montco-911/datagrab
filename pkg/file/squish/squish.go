@@ -9,10 +9,10 @@ import (
 
 type P struct {
 	count int
-	f *os.File
+	f     *os.File
 }
 
-func (p *P) CreateFile(file string){
+func (p *P) CreateFile(file string) {
 	f, err := os.Create(file)
 	if err != nil {
 		return
@@ -20,10 +20,9 @@ func (p *P) CreateFile(file string){
 	p.f = f
 }
 
-
 func (p *P) Process(b []byte) {
 	p.count += 1
-    if p.count == 1 {
+	if p.count == 1 {
 
 		p.f.Write([]byte("TimeStamp,Title,Desc,Lng,Lag,Postal,Station\n"))
 		return
@@ -38,11 +37,10 @@ func (p *P) Process(b []byte) {
 		}
 
 	}
-   for k,_ := range m {
-	   r := fmt.Sprintf("%s\n", k)
-	   p.f.Write([]byte(r))
-   }
-
+	for k, _ := range m {
+		r := fmt.Sprintf("%s\n", k)
+		p.f.Write([]byte(r))
+	}
 
 }
 

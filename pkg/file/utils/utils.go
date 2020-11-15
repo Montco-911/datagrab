@@ -16,7 +16,7 @@ type UT struct {
 
 func NewUT(file string, readDistance int, p func([]byte)) *UT {
 	ut := &UT{file, readDistance,
-		p,-1, sync.Mutex{}}
+		p, -1, sync.Mutex{}}
 	return ut
 }
 
