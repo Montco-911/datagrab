@@ -46,7 +46,7 @@ func (ut *UT) Squish(file string) {
 	f2, err := os.Open(file)
 	defer f2.Close()
 
-	var offset, old int64
+	var offset, oldoffset int64
 
 	b := make([]byte, ut.ReadDistance)
 	pt, idx, err := RR(f2, b)
@@ -60,10 +60,10 @@ func (ut *UT) Squish(file string) {
 		}
 		ut.Process(b[0:idx])
 
-		if offset == old {
+		if offset == oldoffset {
 			break
 		}
-		old = offset
+		oldoffset = offset
 	}
 
 }
