@@ -45,9 +45,9 @@ func TestUT_LineGulp(t *testing.T) {
 func TestUT_SetStop(t *testing.T) {
 	p := &P{}
 
-	file := "/Users/rommel/Downloads/alllivexml.csv"
+	file := "../../../fixtures/alllivexml.csv"
 
-	ut := NewUT("junk.txt", 50000, p.Process)
-	ut.SetStop(12000)
+	ut := NewUT("junk2.txt", 5000, p.Process)
+	ut.SetStop(1200)
 	ut.LineGulp(file)
 }
