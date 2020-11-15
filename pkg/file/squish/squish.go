@@ -50,9 +50,10 @@ func DoSquish() {
 	p := &P{}
 	p.CreateFile("out.csv")
 
-	file := "../../../fixtures/alllivexml.csv"
+	//file := "../../../fixtures/alllivexml.csv"
+	file := "/Users/rommel/Downloads/alllivexml.csv"
 
-	ut := utils.NewUT("junk2.txt", 5000, p.Process)
-	ut.SetStop(12000)
+	ut := utils.NewUT("junk2.txt", 5000000, p.Process)
+	//ut.SetStop(12000)
 	ut.LineGulp(file)
 }
