@@ -47,7 +47,7 @@ func TestUT_SetStop(t *testing.T) {
 
 	file := "/Users/rommel/Downloads/alllivexml.csv"
 
-	ut := NewUT("junk.txt", 50, p.Process)
-	ut.SetStop(1200)
+	ut := NewUT("junk.txt", 50000, p.Process)
+	ut.SetStop(12000)
 	ut.LineGulp(file)
 }
