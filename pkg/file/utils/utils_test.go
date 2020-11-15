@@ -27,13 +27,16 @@ func (p *P) Process(b []byte) {
 	}
 }
 
-func TestUT_Squish(t *testing.T) {
+func TestUT_LineGulp(t *testing.T) {
 	p := &P{}
 
 	file := "mockfile.txt"
 	CreateMock(file)
 	ut := NewUT("junk.txt", 50, p.Process)
-	ut.Squish(file)
+	ut.LineGulp(file)
 
-	fmt.Printf("a= %v\n", p.count)
+	if p.count != 252 {
+		t.Fatalf("Expected 252, got: %d\n",p.count)
+	}
+
 }

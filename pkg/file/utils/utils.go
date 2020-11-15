@@ -34,7 +34,7 @@ func RR(f *os.File, b []byte) (int64, int, error) {
 	return int64(idx - n), idx, err
 }
 
-func (ut *UT) Squish(file string) {
+func (ut *UT) LineGulp(file string) {
 	ut.Lock()
 	defer ut.Unlock()
 	f, err := os.Create(ut.Outfile)
